@@ -10,15 +10,27 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
 
-    // var itemArray = ["Book flight", "Schedule haircut", "Complete todo app"]
+    // MARK: - Global constants
+    
+    // array of Done It items
     var itemArray = [Item]()
     
-    var defaults = UserDefaults.standard
+    // access app files and create path to new .plist for Done It items
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
+    /* Previous testing with String array and user defaults:
+     var itemArray = ["Book flight", "Schedule haircut", "Complete todo app"]
+     var defaults = UserDefaults.standard
+    */
+    
+    // MARK: - Initializing data
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    
+        // print(dataFilePath)
         
+        /* test adding items
         let newItem = Item()
         newItem.title = "Book flight"
         itemArray.append(newItem)
@@ -26,16 +38,18 @@ class TodoListViewController: UITableViewController {
         let newItem2 = Item()
         newItem2.title = "Schedule haircut"
         itemArray.append(newItem2)
+        */
+
         
-        let newItem3 = Item()
-        newItem3.title = "Complete todo app"
-        itemArray.append(newItem3)
-        
-        // defaults
+        /* using user defaults
         if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
             itemArray = items
         }
- 
+        */
+        
+        
+        // using NSCoder
+        loadItems()
         
     }
     
@@ -68,10 +82,11 @@ class TodoListViewController: UITableViewController {
         // reverse true/false of isDone property
         itemArray[indexPath.row].isDone = !itemArray[indexPath.row].isDone
         
+        // update true/false status in Items.plist
+        saveItems()
+        
         // deselect selected cell to un-highlight
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        tableView.reloadData()
         
     }
     
@@ -92,12 +107,10 @@ class TodoListViewController: UITableViewController {
             let newItem = Item()
             newItem.title =  textField.text!
             
-            // add to array of items
+            // add to array of items, save, update tableView
             self.itemArray.append(newItem)
+            self.saveItems()
             
-            //save item array to user defaults
-            self.defaults.set(self.itemArray, forKey: "TodoListArray")
-            self.tableView.reloadData()
         }
         
         alert.addTextField { (alertTextField) in
@@ -110,12 +123,39 @@ class TodoListViewController: UITableViewController {
         
     }
     
+    // MARK: - Methods to manipulate model
     
+    // encode array of custom objects
+    func saveItems() {
+        // old version - save String array to user defaults
+        // self.defaults.set(self.itemArray, forKey: "TodoListArray")
+        
+        // new version - save Item array to new .plist in documents
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding array, \(error)")
+        }
+        
+        // refresh tableView data on screen
+        tableView.reloadData()
+    }
     
-    
-    
-    
-    
+    // decode array of custom objects
+    func loadItems() {
+        
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Error decoding array, \(error)")
+            }
+        }
+    }
 
 }
 
