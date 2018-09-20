@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
 
@@ -15,10 +16,13 @@ class TodoListViewController: UITableViewController {
     // array of Done It items
     var itemArray = [Item]()
     
-    // access app files and create path to new .plist for Done It items
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    /* Previous testing with String array and user defaults:
+    /* Previous testing with data stored in file system:
+     // access app files and create path to new .plist for Done It items
+     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+     
+     // String array and user defaults
      var itemArray = ["Book flight", "Schedule haircut", "Complete todo app"]
      var defaults = UserDefaults.standard
     */
@@ -28,7 +32,7 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        // print(dataFilePath)
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         /* test adding items
         let newItem = Item()
@@ -47,8 +51,6 @@ class TodoListViewController: UITableViewController {
         }
         */
         
-        
-        // using NSCoder
         loadItems()
         
     }
@@ -103,9 +105,11 @@ class TodoListViewController: UITableViewController {
             // callback (in the future) after the below has completed
             print("Success!")
             
+            
             // create new item with title
-            let newItem = Item()
+            let newItem = Item(context: self.context)
             newItem.title =  textField.text!
+            newItem.isDone = false
             
             // add to array of items, save, update tableView
             self.itemArray.append(newItem)
@@ -125,28 +129,48 @@ class TodoListViewController: UITableViewController {
     
     // MARK: - Methods to manipulate model
     
-    // encode array of custom objects
+    // save array of custom items to DB
     func saveItems() {
-        // old version - save String array to user defaults
-        // self.defaults.set(self.itemArray, forKey: "TodoListArray")
         
-        // new version - save Item array to new .plist in documents
-        let encoder = PropertyListEncoder()
         
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
+            
+            /* 2nd version using encoder
+             let data = try encoder.encode(itemArray)
+             try data.write(to: dataFilePath!)
+             */
+            
         } catch {
-            print("Error encoding array, \(error)")
+            print("Error saving context, \(error)")
         }
         
         // refresh tableView data on screen
         tableView.reloadData()
+        
+        
+        // 1st version - save String array to user defaults
+        // self.defaults.set(self.itemArray, forKey: "TodoListArray")
+        
+        /* 2nd version - save Item array to new .plist in documents
+         // encode array of custom objects
+         let encoder = PropertyListEncoder()
+         */
     }
     
-    // decode array of custom objects
+    // load array of custom items from DB
     func loadItems() {
         
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context, \(error)")
+        }
+        
+        
+        /* used in 2nd version with .plist method
+        // decode array of custom objects
         if let data = try? Data(contentsOf: dataFilePath!) {
             let decoder = PropertyListDecoder()
             do {
@@ -155,7 +179,10 @@ class TodoListViewController: UITableViewController {
                 print("Error decoding array, \(error)")
             }
         }
+         */
+        
     }
+
 
 }
 
