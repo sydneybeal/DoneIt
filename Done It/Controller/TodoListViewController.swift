@@ -159,14 +159,16 @@ class TodoListViewController: UITableViewController {
     }
     
     // load array of custom items from DB
-    func loadItems() {
+    func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
         
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
         do {
             itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data from context, \(error)")
         }
+        
+        // reload table view
+        tableView.reloadData()
         
         
         /* used in 2nd version with .plist method
@@ -185,4 +187,47 @@ class TodoListViewController: UITableViewController {
 
 
 }
+
+//MARK: - Search bar methods
+
+extension TodoListViewController : UISearchBarDelegate {
+    
+    // perform search and reload table view
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        // initialize fetch request
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        // set up predicate and sorting
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        // retrieve itemArray of search results
+        loadItems(with: request)
+        
+//        do {
+//            itemArray = try context.fetch(request)
+//        } catch {
+//            print("Error fetching data from context, \(error)")
+//        }
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            // call default loadItems that returns all of the items
+            loadItems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+            
+            
+        }
+        
+    }
+    
+}
+
+
 
