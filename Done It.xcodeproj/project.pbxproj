@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9DAA696023205B069F692E7 /* Pods_Done_It.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94549606B9F640F5A6EEFE85 /* Pods_Done_It.framework */; };
 		EAC788622151E1280018CBBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC788612151E1280018CBBE /* AppDelegate.swift */; };
 		EAC788642151E1280018CBBE /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC788632151E1280018CBBE /* TodoListViewController.swift */; };
 		EAC788672151E1280018CBBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAC788652151E1280018CBBE /* Main.storyboard */; };
@@ -17,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2AA0E61BB1EF4C075FFAC21B /* Pods-Done It.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Done It.release.xcconfig"; path = "Pods/Target Support Files/Pods-Done It/Pods-Done It.release.xcconfig"; sourceTree = "<group>"; };
+		3FDF0DFE4FD74D21A45E36E1 /* Pods-Done It.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Done It.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Done It/Pods-Done It.debug.xcconfig"; sourceTree = "<group>"; };
+		94549606B9F640F5A6EEFE85 /* Pods_Done_It.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Done_It.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAC7885E2151E1280018CBBE /* Done It.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Done It.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAC788612151E1280018CBBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EAC788632151E1280018CBBE /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
@@ -33,17 +37,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9DAA696023205B069F692E7 /* Pods_Done_It.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05B5D150AF47A137081D21AF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3FDF0DFE4FD74D21A45E36E1 /* Pods-Done It.debug.xcconfig */,
+				2AA0E61BB1EF4C075FFAC21B /* Pods-Done It.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C7F212BCFA0D8F8D42228CDD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				94549606B9F640F5A6EEFE85 /* Pods_Done_It.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EAC788552151E1280018CBBE = {
 			isa = PBXGroup;
 			children = (
 				EAC788602151E1280018CBBE /* Done It */,
 				EAC7885F2151E1280018CBBE /* Products */,
+				05B5D150AF47A137081D21AF /* Pods */,
+				C7F212BCFA0D8F8D42228CDD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,9 +133,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EAC788702151E12C0018CBBE /* Build configuration list for PBXNativeTarget "Done It" */;
 			buildPhases = (
+				52554D11C03D487EE1C40E88 /* [CP] Check Pods Manifest.lock */,
 				EAC7885A2151E1280018CBBE /* Sources */,
 				EAC7885B2151E1280018CBBE /* Frameworks */,
 				EAC7885C2151E1280018CBBE /* Resources */,
+				64DD0DD9C80C298C82089C07 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -134,6 +160,7 @@
 				TargetAttributes = {
 					EAC7885D2151E1280018CBBE = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -167,6 +194,47 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		52554D11C03D487EE1C40E88 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Done It-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		64DD0DD9C80C298C82089C07 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Done It/Pods-Done It-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Done It/Pods-Done It-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EAC7885A2151E1280018CBBE /* Sources */ = {
@@ -318,6 +386,7 @@
 		};
 		EAC788712151E12C0018CBBE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3FDF0DFE4FD74D21A45E36E1 /* Pods-Done It.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -329,13 +398,14 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SydneyBeal.Done-It";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		EAC788722151E12C0018CBBE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AA0E61BB1EF4C075FFAC21B /* Pods-Done It.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -347,7 +417,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SydneyBeal.Done-It";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
