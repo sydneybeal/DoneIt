@@ -17,7 +17,6 @@ class CategoryViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         loadCategories()
     }
 
@@ -27,9 +26,7 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let newCell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        
         newCell.textLabel?.text = categories?[indexPath.row].name ?? "No categories added yet"
-        
         return newCell
     }
     
@@ -64,14 +61,12 @@ class CategoryViewController: UITableViewController {
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
-        
         let alert = UIAlertController(title: "Add New Done It Category", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add category", style: .default) { (action) in
             
             let newCategory = Category()
             newCategory.name = textField.text!
-            // self.categories.append(newCategory)
             
             self.save(category: newCategory)
         }
@@ -82,7 +77,6 @@ class CategoryViewController: UITableViewController {
         }
         
         alert.addAction(action)
-        
         present(alert, animated: true, completion: nil)
     }
     
@@ -99,11 +93,11 @@ class CategoryViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // only one segue, not needed if statement (if segue identifier == "goToItems")
         let destinationVC = segue.destination as! TodoListViewController
+        
         // grab category from selected cell
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categories?[indexPath.row]
         }
-        
         
     }
     
