@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
 
     // MARK: - Global constants
     
@@ -37,18 +37,18 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let newCell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let item = todoItems?[indexPath.row] {
             // add DoneIt item title to text label of cell
-            newCell.textLabel?.text = item.title
+            cell.textLabel?.text = item.title
             
             // put checkmark if item is done
             // ternary operator
-            newCell.accessoryType = item.isDone ? .checkmark : .none
+            cell.accessoryType = item.isDone ? .checkmark : .none
         } else {
-            newCell.textLabel?.text = "No items added"
+            cell.textLabel?.text = "No items added"
         }
-        return newCell
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -106,6 +106,24 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
 
     }
+    
+    //MARK: - delete data from swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        
+        if let itemForDeletion = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    // toggle true/false of isDone property
+                    realm.delete(itemForDeletion)
+                }
+            } catch {
+                print("Error deleting item, \(error)")
+            }
+        }
+        
+    }
+    
     
     // MARK: - TableView delegate methods
     
