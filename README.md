@@ -1,2 +1,4 @@
 # DoneIt
-Apple App Store App. To-do list app organized by category
+To-do lists organized by category
+
+Available on the App Store
